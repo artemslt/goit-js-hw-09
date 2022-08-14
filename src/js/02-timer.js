@@ -10,11 +10,15 @@ const refs = {
   hours: document.querySelector('[data-hours]'),
   minutes: document.querySelector('[data-minutes]'),
   seconds: document.querySelector('[data-seconds]'),
+  timerBox: document.querySelector('.timer'),
+  fields: document.querySelectorAll('.field'),
 };
 
-// refs.startBtn.disabled = true;
+refs.timerBox.style.display = 'flex';
+refs.timerBox.style.fontSize = '50px';
+refs.timerBox.style.color = 'tomato';
+refs.timerBox.style.justifyContent = 'space-between';
 
-// refs.startBtn.addEventListener('click', stratTimer);
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -30,40 +34,78 @@ const options = {
 };
 const fp = flatpickr('#datetime-picker', options);
 
-// function stratTimer() {
-//   const time = fp.selectedDates[0].getTime();
+const timer = {
+  ms: null,
+  timerId: null,
 
-//   setInterval(() => {
+  stratTimer() {
+    const selectedTime = fp.selectedDates[0].getTime();
+    console.log('selectedTime', selectedTime);
+    this.timerId = setInterval(() => {
+      const currentTime = Date.now();
+      console.log('timerId ~ currentTime', currentTime);
+      this.ms = selectedTime - currentTime;
+      console.log('timerId ~ ms', this.ms);
+      const { days, hours, minutes, seconds } = convertMs(this.ms);
+
+      refs.days.textContent = addLeadingZero(days);
+      refs.hours.textContent = addLeadingZero(hours);
+      refs.minutes.textContent = addLeadingZero(minutes);
+      refs.seconds.textContent = addLeadingZero(seconds);
+      refs.startBtn.disabled = true;
+      if (this.ms > 0 && this.ms < 1000) {
+        clearInterval(this.timerId);
+        return Notiflix.Notify.warning('Timer is over!');
+      }
+    }, 1000);
+  },
+};
+
+// function stratTimer() {
+//   const selectedTime = fp.selectedDates[0].getTime();
+//   console.log('selectedTime', selectedTime);
+//   const timerId = setInterval(() => {
 //     const currentTime = Date.now();
-//     const ms = time - currentTime;
+//     console.log('timerId ~ currentTime', currentTime);
+//     const ms = selectedTime - currentTime;
+//     console.log('timerId ~ ms', ms);
 //     const { days, hours, minutes, seconds } = convertMs(ms);
+
 //     refs.days.textContent = addLeadingZero(days);
 //     refs.hours.textContent = addLeadingZero(hours);
 //     refs.minutes.textContent = addLeadingZero(minutes);
 //     refs.seconds.textContent = addLeadingZero(seconds);
 //     refs.startBtn.disabled = true;
+
+//     if (ms < 0) {
+//       clearInterval(timerId);
+//       ms = 0;
+//     }
 //   }, 1000);
 // }
 
-// function convertMs(ms) {
-//   // Number of milliseconds per unit of time
-//   const second = 1000;
-//   const minute = second * 60;
-//   const hour = minute * 60;
-//   const day = hour * 24;
+refs.startBtn.disabled = true;
+refs.startBtn.addEventListener('click', timer.stratTimer);
 
-//   // Remaining days
-//   const days = Math.floor(ms / day);
-//   // Remaining hours
-//   const hours = Math.floor((ms % day) / hour);
-//   // Remaining minutes
-//   const minutes = Math.floor(((ms % day) % hour) / minute);
-//   // Remaining seconds
-//   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
 
-//   return { days, hours, minutes, seconds };
-// }
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-// function addLeadingZero(value) {
-//   return value.toString().padStart(2, 0);
-// }
+  return { days, hours, minutes, seconds };
+}
+
+function addLeadingZero(value) {
+  return value.toString().padStart(2, 0);
+}

@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@vimeo/player": "^2.17.1",
-    "bower-npm-resolver": "^0.7.0",
     "flatpickr": "^4.6.13",
     "lodash.throttle": "^4.1.1",
     "modern-normalize": "^1.1.0",
