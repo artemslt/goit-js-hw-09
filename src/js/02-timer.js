@@ -17,7 +17,7 @@ const refs = {
 refs.timerBox.style.display = 'flex';
 refs.timerBox.style.fontSize = '50px';
 refs.timerBox.style.color = 'tomato';
-refs.timerBox.style.justifyContent = 'space-between';
+refs.timerBox.style.justifyContent = 'space-around';
 
 const options = {
   enableTime: true,
@@ -27,7 +27,7 @@ const options = {
   onClose(selectedDates) {
     if (selectedDates[0] <= options.defaultDate) {
       refs.startBtn.disabled = true;
-      return Notiflix.Notify.warning('Please choose a date in the future');
+      return Notiflix.Notify.failure('Please choose a date in the future');
     }
     refs.startBtn.disabled = false;
   },
