@@ -18,21 +18,19 @@ function onSubmit(event) {
 
 function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.3;
-  const newPromise = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (shouldResolve) {
-        resolve({ position, delay });
-      } else {
-        reject({ position, delay });
-      }
-    }, delay);
-  });
-
-  newPromise
-    .then(({ position, delay }) => {
-      Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-    })
-    .catch(({ position, delay }) => {
-      Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-    });
+  setTimeout(() => {
+    if (shouldResolve) {
+      resolve({ position, delay });
+    } else {
+      reject({ position, delay });
+    }
+  }, delay);
 }
+
+createPromise(position, delay)
+  .then(({ position, delay }) => {
+    Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+  })
+  .catch(({ position, delay }) => {
+    Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+  });
