@@ -6,9 +6,9 @@ form.addEventListener('submit', onSubmit);
 
 function onSubmit(event) {
   event.preventDefault();
-  const inputDelay = Number(form.elements.delay.value);
-  const step = Number(form.elements.step.value);
-  const amount = Number(form.elements.amount.value);
+  const inputDelay = Number(event.target.delay.value);
+  const step = Number(event.target.step.value);
+  const amount = Number(event.target.amount.value);
   for (let i = 0; i < amount; i++) {
     const position = i + 1;
     const delay = inputDelay + step * i;

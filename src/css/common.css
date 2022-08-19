@@ -16,3 +16,10 @@ img {
   display: block;
   max-width: 100%;
 }
+
+.timer {
+  display: flex;
+  font-size: 50px;
+  color: tomato;
+  justify-content: space-around;
+}

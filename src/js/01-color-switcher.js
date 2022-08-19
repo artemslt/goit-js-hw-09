@@ -9,11 +9,13 @@ refs.startBtn.addEventListener('click', () => {
   timerId = setInterval(() => {
     document.body.style.backgroundColor = getRandomHexColor();
     refs.startBtn.disabled = true;
-  }, 500);
+    refs.stopBtn.disabled = false;
+  }, 1000);
 });
 
 refs.stopBtn.addEventListener('click', () => {
   clearInterval(timerId);
+  refs.stopBtn.disabled = true;
   refs.startBtn.disabled = false;
 });
 

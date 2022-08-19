@@ -14,11 +14,6 @@ const refs = {
   fields: document.querySelectorAll('.field'),
 };
 
-refs.timerBox.style.display = 'flex';
-refs.timerBox.style.fontSize = '50px';
-refs.timerBox.style.color = 'tomato';
-refs.timerBox.style.justifyContent = 'space-around';
-
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -40,19 +35,16 @@ const timer = {
 
   stratTimer() {
     const selectedTime = fp.selectedDates[0].getTime();
-    console.log('selectedTime', selectedTime);
+    refs.startBtn.disabled = true;
+    clearInterval(this.timerId);
+
     this.timerId = setInterval(() => {
       const currentTime = Date.now();
-      console.log('timerId ~ currentTime', currentTime);
       this.ms = selectedTime - currentTime;
-      console.log('timerId ~ ms', this.ms);
       const { days, hours, minutes, seconds } = convertMs(this.ms);
 
-      refs.days.textContent = addLeadingZero(days);
-      refs.hours.textContent = addLeadingZero(hours);
-      refs.minutes.textContent = addLeadingZero(minutes);
-      refs.seconds.textContent = addLeadingZero(seconds);
-      refs.startBtn.disabled = true;
+      markup({ days, hours, minutes, seconds });
+
       if (this.ms > 0 && this.ms < 1000) {
         clearInterval(this.timerId);
         return Notiflix.Notify.warning('Timer is over!');
@@ -61,30 +53,6 @@ const timer = {
   },
 };
 
-// function stratTimer() {
-//   const selectedTime = fp.selectedDates[0].getTime();
-//   console.log('selectedTime', selectedTime);
-//   const timerId = setInterval(() => {
-//     const currentTime = Date.now();
-//     console.log('timerId ~ currentTime', currentTime);
-//     const ms = selectedTime - currentTime;
-//     console.log('timerId ~ ms', ms);
-//     const { days, hours, minutes, seconds } = convertMs(ms);
-
-//     refs.days.textContent = addLeadingZero(days);
-//     refs.hours.textContent = addLeadingZero(hours);
-//     refs.minutes.textContent = addLeadingZero(minutes);
-//     refs.seconds.textContent = addLeadingZero(seconds);
-//     refs.startBtn.disabled = true;
-
-//     if (ms < 0) {
-//       clearInterval(timerId);
-//       ms = 0;
-//     }
-//   }, 1000);
-// }
-
-refs.startBtn.disabled = true;
 refs.startBtn.addEventListener('click', timer.stratTimer);
 
 function convertMs(ms) {
@@ -108,4 +76,11 @@ function convertMs(ms) {
 
 function addLeadingZero(value) {
   return value.toString().padStart(2, 0);
+}
+
+function markup({ days, hours, minutes, seconds }) {
+  refs.days.textContent = addLeadingZero(days);
+  refs.hours.textContent = addLeadingZero(hours);
+  refs.minutes.textContent = addLeadingZero(minutes);
+  refs.seconds.textContent = addLeadingZero(seconds);
 }
